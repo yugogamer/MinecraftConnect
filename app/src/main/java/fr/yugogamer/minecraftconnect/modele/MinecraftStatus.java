@@ -1,7 +1,11 @@
 package fr.yugogamer.minecraftconnect.modele;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MinecraftStatus {
     private String name;
@@ -14,6 +18,7 @@ public class MinecraftStatus {
     private boolean modded;
     private boolean hardcore;
     private boolean pvp;
+    private List<String> playerName;
 
     MinecraftStatus(JSONObject response)
     {
@@ -49,6 +54,22 @@ public class MinecraftStatus {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addPlayerList(JSONObject response)
+    {
+        try {
+            JSONArray array = response.getJSONArray("players");
+            this.maxPlayer = response.getInt("maxplayer");
+            this.currentPlayer = response.getInt("currentplayer");
+            this.playerName = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                this.playerName.add(array.getString(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String getName() {
